@@ -2,6 +2,7 @@ package com.github.dedo_finger2.home_stock.entities;
 
 import jakarta.persistence.*;
 
+import java.security.InvalidParameterException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -13,12 +14,14 @@ public class InventoryItemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
     @JoinColumn(name = "inventory_id", nullable = false)
     private InventoryEntity inventory;
 
     @Column(nullable = false)
     private String name;
 
+    @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private CategoryEntity category;
 
@@ -64,7 +67,20 @@ public class InventoryItemEntity {
     }
 
     public void setName(String name) {
-        this.name = name;
+        if (name.length() < 3) throw new InvalidParameterException("name cannot be less than 3 characters");
+        this.name = this.formatName(name);
+    }
+
+    private String formatName(String name) {
+        String lowercase = name.toLowerCase();
+        String[] eachWord = lowercase.split(" ");
+        String[] upperWord = new String[eachWord.length];
+        for (int i = 0; i < eachWord.length; i++) {
+            if (!eachWord[i].isEmpty()) {
+                upperWord[i] = eachWord[i].substring(0, 1).toUpperCase() + eachWord[i].substring(1).toLowerCase();
+            }
+        }
+        return String.join(" ", upperWord);
     }
 
     public CategoryEntity getCategory() {
