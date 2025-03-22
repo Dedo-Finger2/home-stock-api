@@ -3,6 +3,7 @@ package com.github.dedo_finger2.home_stock.entities;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.security.InvalidParameterException;
 
 @Entity
 @Table(name = "completed_shopping_list_items")
@@ -12,6 +13,7 @@ public class CompletedShoppingListItemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
     @JoinColumn(name = "shopping_list_item_id", nullable = false)
     private ShoppingListItemEntity shoppingListItem;
 
@@ -52,6 +54,7 @@ public class CompletedShoppingListItemEntity {
     }
 
     public void setQuantityBought(float quantityBought) {
+        if (quantityBought <= 0) throw new InvalidParameterException("quantityBought cannot be less than 1");
         this.quantityBought = quantityBought;
     }
 
