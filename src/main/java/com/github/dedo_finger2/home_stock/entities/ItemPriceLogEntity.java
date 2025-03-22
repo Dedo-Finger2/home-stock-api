@@ -13,6 +13,7 @@ public class ItemPriceLogEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
     @JoinColumn(name = "inventory_items_id", nullable = false)
     private InventoryItemEntity inventoryItem;
 
