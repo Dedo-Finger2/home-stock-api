@@ -10,9 +10,11 @@ public class ShoppingListItemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
     @JoinColumn(name = "shopping_list_id", nullable = false)
     private ShoppingListEntity shoppingList;
 
+    @ManyToOne
     @JoinColumn(name = "inventory_item_id", nullable = false)
     private InventoryItemEntity inventoryItem;
 
