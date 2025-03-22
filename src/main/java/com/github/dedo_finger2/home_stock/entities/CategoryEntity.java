@@ -2,6 +2,7 @@ package com.github.dedo_finger2.home_stock.entities;
 
 import jakarta.persistence.*;
 
+import java.security.InvalidParameterException;
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,6 +15,7 @@ public class CategoryEntity {
     @Column(nullable = false)
     private String name;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "created_at", nullable = false)
@@ -21,13 +23,6 @@ public class CategoryEntity {
 
     public CategoryEntity() {
         this.createdAt = LocalDateTime.now();
-    }
-
-    public CategoryEntity(Long id, String name, String description, LocalDateTime createdAt) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.createdAt = createdAt;
     }
 
     public Long getId() {
@@ -43,7 +38,8 @@ public class CategoryEntity {
     }
 
     public void setName(String name) {
-        this.name = name;
+        if (name.length() < 3) throw new InvalidParameterException("name should be at least 3 characters long");
+        this.name = name.toLowerCase().replaceAll(" ", "-");
     }
 
     public String getDescription() {
